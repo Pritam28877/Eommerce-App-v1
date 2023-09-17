@@ -27,13 +27,25 @@ export function SiteHeader() {
         </form>
         <div className="flex items-center space-x-1">
           <Link href="/cart">
-            <Button size="sm" variant="ghost">
+            <Button
+              style={{ fontSize: "small", backgroundColor: "transparent" }}
+            >
               <ShoppingBag className="h-5 w-5" />
               <span className="ml-2 text-sm font-bold">0</span>
               <span className="sr-only">Cart</span>
             </Button>
           </Link>
           <ThemeToggle />
+          {process.env.NODE_ENV === "development" && (
+            <Link href="/studio">
+              <Button
+                style={{ fontSize: "small", backgroundColor: "transparent" }}
+              >
+                <Edit className="h-5 w-5" />
+                <span className="sr-only">Admin</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
