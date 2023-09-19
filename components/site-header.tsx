@@ -33,7 +33,7 @@ export function SiteHeader() {
         <div className="flex items-center space-x-1">
           <Link href="/cart">
             <Button
-              style={{ fontSize: "small", backgroundColor: "transparent" }}
+              style={{ fontSize: "small", backgroundColor: "#fff" }}
             >
               <ShoppingBag className="h-5 w-5" />
               <span className="ml-2 text-sm font-bold">0</span>
@@ -44,7 +44,7 @@ export function SiteHeader() {
           {process.env.NODE_ENV === "development" && (
             <Link href="/studio">
               <Button
-                style={{ fontSize: "small", backgroundColor: "transparent" }}
+                style={{ fontSize: "small", backgroundColor: "#fff" }}
               >
                 <Edit className="h-5 w-5" />
                 <span className="sr-only">Admin</span>
