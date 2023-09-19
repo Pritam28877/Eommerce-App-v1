@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity"
 
 export const product = defineType({
   name: "product",
-  title: "Product",
+  title: "Products",
   type: "document",
   fields: [
     defineField({
@@ -25,20 +25,26 @@ export const product = defineType({
       of: [{ type: "image" }],
     },
     {
+      name: "images",
+      title: "Images",
+      type: "array",
+      of: [{ type: "image" }],
+    },
+    {
       name: "categories",
       title: "Categories",
       type: "array",
       of: [{ type: "string" }],
     },
     {
-      name: "size",
-      title: "Size",
+      name: "sizes",
+      title: "Sizes",
       type: "array",
       of: [{ type: "string" }],
     },
     {
-      name: "color",
-      title: "Color",
+      name: "colors",
+      title: "Colors",
       type: "array",
       of: [{ type: "string" }],
     },
