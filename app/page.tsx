@@ -12,18 +12,35 @@ import { ProductSort } from "@/components/product-sort"
 interface Props {}
 
 export default async function Page() {
-  await seedSanityData()
+  const Products = await client.fetch<SanityProduct[]>(
+    groq`*[_type == "product"]{
+      _id,
+      _createdAt,
+      name,
+      sku,
+      images,
+      currency,
+      price,
+      description,
+      "slug": slug.current,
+    }`
+  )
+
   return (
     <div>
       <div className="px-4 pt-20 text-center">
-        <h1 className="text-4xl font-extrabold tracking-normal">Name</h1>
-        <p className="mx-auto mt-4 max-w-3xl text-base">Description</p>
+        <h1 className="text-4xl font-extrabold tracking-normal">
+          {siteConfig.name}
+        </h1>
+        <p className="mx-auto mt-4 max-w-3xl text-base">
+          {siteConfig.description}
+        </p>
       </div>
       <div>
         <main className="mx-auto max-w-6xl px-6">
           <div className="flex items-center justify-between border-b border-gray-200 pb-4 pt-24 dark:border-gray-800">
             <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
-              0 products
+              {Products.length}product{Products.length > 1 && "s"}
             </h1>
             {/* Product Sort */}
           </div>
