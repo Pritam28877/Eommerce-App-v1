@@ -3,6 +3,7 @@ import { groq } from "next-sanity"
 
 import { SanityProduct } from "@/config/inventory"
 import { siteConfig } from "@/config/site"
+import { seedSanityData } from "@/lib/seed"
 import { cn } from "@/lib/utils"
 import { ProductFilters } from "@/components/product-filters"
 import { ProductGrid } from "@/components/product-grid"
@@ -10,7 +11,8 @@ import { ProductSort } from "@/components/product-sort"
 
 interface Props {}
 
-export default function Page() {
+export default async function Page() {
+  await seedSanityData()
   return (
     <div>
       <div className="px-4 pt-20 text-center">
