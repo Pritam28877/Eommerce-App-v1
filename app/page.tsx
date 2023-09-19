@@ -1,4 +1,5 @@
 import { client } from "@/sanity/lib/client"
+import { product } from "@/sanity/schemas/product-schema"
 import { groq } from "next-sanity"
 
 import { SanityProduct } from "@/config/inventory"
@@ -18,6 +19,7 @@ export default async function Page() {
       _createdAt,
       name,
       sku,
+      image,
       images,
       currency,
       price,
@@ -43,15 +45,27 @@ export default async function Page() {
               {Products.length}product{Products.length > 1 && "s"}
             </h1>
             {/* Product Sort */}
+            <ProductSort />
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              <div className="hidden lg:block">{/* Product filters */}</div>
+            <div
+              className={cn(
+                "grid grid-cols-1 gap-x-8 gap-y-10 ",
+                Products.length > 0
+                  ? "lg:grid-cols-4"
+                  : "lg:grid-cols-[1fr_3fr]"
+              )}
+            >
+              <div className="hidden lg:block">
+                {/* Product filters */}
+                <ProductFilters />
+              </div>
               {/* Product grid */}
+              <ProductGrid />
             </div>
           </section>
         </main>
