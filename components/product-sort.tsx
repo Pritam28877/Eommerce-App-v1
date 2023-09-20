@@ -33,7 +33,13 @@ export function ProductSort() {
         <SelectTrigger className="sm:w-[180px]">
           <SelectValue placeholder="Sort By" />
         </SelectTrigger>
-        <SelectContent>Sort Options</SelectContent>
+        <SelectContent>
+          {sortOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
       <Sheet>
         <SheetContent className="w-[300px]">
