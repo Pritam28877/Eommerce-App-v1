@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client"
 import { product } from "@/sanity/schemas/product-schema"
 import { groq } from "next-sanity"
+import { Product } from "use-shopping-cart/core"
 
 import { SanityProduct } from "@/config/inventory"
 import { siteConfig } from "@/config/site"
@@ -65,7 +66,7 @@ export default async function Page() {
                 <ProductFilters />
               </div>
               {/* Product grid */}
-              <ProductGrid />
+              <ProductGrid products={Products} />
             </div>
           </section>
         </main>

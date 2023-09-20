@@ -9,10 +9,15 @@ import { formatCurrencyString } from "use-shopping-cart"
 import { SanityProduct } from "@/config/inventory"
 import { shimmer, toBase64 } from "@/lib/image"
 
-interface Props {}
+import { product } from "../sanity/schemas/product-schema"
 
-export function ProductGrid() {
-  if ([].length === 0) {
+interface Props {
+  products: any[]
+}
+
+export function ProductGrid({ products }: Props) {
+  // console.log(products?.image)
+  if (products.length === 0) {
     return (
       <div className="mx-auto grid h-40 w-full place-items-center rounded-md border-2 border-dashed bg-gray-50 py-10 text-center dark:bg-gray-900">
         <div>
@@ -27,21 +32,37 @@ export function ProductGrid() {
 
   return (
     <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3 lg:col-span-3 lg:gap-x-8">
-      {[].map((product) => (
-        <Link key={"key"} href={`/products/slug`} className="group text-sm">
-          <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-100 group-hover:opacity-75 dark:border-gray-800">
-            <Image
-              src={"src"}
-              alt={"name"}
-              width={0}
-              height={0}
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
-          <h3 className="mt-4 font-medium">Name</h3>
-          <p className="mt-2 font-medium">Price</p>
-        </Link>
-      ))}
+      {products.map(
+        (product) =>
+          product.image && (
+            <Link
+              key={product.id}
+              href={`/products/${product.slug}`}
+              className="group text-sm"
+            >
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-100 group-hover:opacity-75 dark:border-gray-800">
+                <Image
+                  placeholder="blur"
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer(500, 500)
+                  )}`}
+                  src={urlForImage(product.image).url()}
+                  alt={product.name}
+                  width={500}
+                  height={500}
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
+              <h3 className="mt-4 font-medium">{product.name}</h3>
+              <p className="mt-2 font-medium">
+                {formatCurrencyString({
+                  value: product.price,
+                  currency: product.currency,
+                })}
+              </p>
+            </Link>
+          )
+      )}
     </div>
   )
 }
