@@ -11,11 +11,17 @@ import { ProductFilters } from "@/components/product-filters"
 import { ProductGrid } from "@/components/product-grid"
 import { ProductSort } from "@/components/product-sort"
 
-interface Props {}
+interface Props {
+  searchParams : {
+    date?: string
+    price?: string
+  }
+}
 
-export default async function Page() {
+export default async function Page({searchParams}:Props) {
+  console.log(searchParams)
   const Products = await client.fetch<SanityProduct[]>(
-    groq`*[_type == "product"]{
+    groq`*[_type == "product"] {
       _id,
       _createdAt,
       name,
