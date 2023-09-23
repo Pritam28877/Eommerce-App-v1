@@ -10,7 +10,9 @@ import { getSizeName } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 
-interface Props {}
+interface Props {
+    
+}
 
 export function ProductInfo() {
   function addToCart() {}
