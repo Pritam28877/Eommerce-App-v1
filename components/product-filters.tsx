@@ -48,6 +48,7 @@ const filters = [
 ]
 
 export function ProductFilters() {
+  const SeachParams = useSearchParams()
   return (
     <form className="sticky top-20">
       <h3 className="sr-only">Categories</h3>
@@ -57,20 +58,23 @@ export function ProductFilters() {
           <AccordionItem value={`item-${i}`}>
             <AccordionTrigger>
               <span>
-                Section{" "}
+                {section.name}{" "}
                 <span className="ml-1 text-xs font-extrabold uppercase text-gray-400"></span>
               </span>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-4">
-                {section.options.map((option) => (
+                {section.options.map((option, optionIdx) => (
                   <div
                     key={option.value}
                     className="flex items-center space-x-2"
                   >
-                    <Checkbox />
+                    <Checkbox id={`filter-${section.id}-${optionIdx}`} onClick={(event)=>{
+                      const parmas=new URLSearchParams(SeachParams)
+                      const checked = event.currentTarget.dataset.state === "checked"   
+                    }}/>
                     <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      Label
+                      {option.label}
                     </label>
                   </div>
                 ))}
