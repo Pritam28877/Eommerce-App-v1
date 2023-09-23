@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Search } from "lucide-react"
 
 const filters = [
   {
@@ -62,7 +63,9 @@ export function ProductFilters() {
             <AccordionTrigger>
               <span>
                 {section.name}{" "}
-                <span className="ml-1 text-xs font-extrabold uppercase text-gray-400"></span>
+                <span className="ml-1 text-xs font-extrabold uppercase text-gray-400">
+                  {serchParams.get(section.id)?`(${serchParams.get(section.id)})`:``}
+                </span>
               </span>
             </AccordionTrigger>
             <AccordionContent>
