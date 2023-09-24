@@ -18,6 +18,7 @@ export function ProductInfo({ product }: Props) {
   console.log(product)
   const [newsize, setNewSize] = useState(product.sizes[0])
   const { addItem, incrementItem, cartDetails } = useShoppingCart()
+  const { toast } = useToast()
   const isIncard = !!cartDetails?.[product._id]
 
   function addToCart() {
@@ -28,6 +29,18 @@ export function ProductInfo({ product }: Props) {
       },
     }
     isIncard ? incrementItem(item._id) : addItem(item)
+    toast({
+      title: "Added to cart",
+      description: "This product has been added to your cart",
+      action: (
+        <Link href="/cart">
+          <Button variant="link" className="text-white">
+            View cart <ArrowRight className="ml-2 inline-block" />
+          </Button>
+        </Link>
+      ),
+      duration: 5000,
+    })
   }
 
   return (
