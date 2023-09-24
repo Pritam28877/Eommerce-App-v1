@@ -17,7 +17,18 @@ interface Props {
 export function ProductInfo({ product }: Props) {
   console.log(product)
   const [newsize, setNewSize] = useState(product.sizes[0])
-  function addToCart() {}
+  const { addItem, incrementItem, cartDetails } = useShoppingCart()
+  const isIncard = !!cartDetails?.[product._id]
+
+  function addToCart() {
+    const item = {
+      ...product,
+      product_data: {
+        size: newsize,
+      },
+    }
+    isIncard ? incrementItem(item._id) : addItem(item)
+  }
 
   return (
     <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -57,6 +68,7 @@ export function ProductInfo({ product }: Props) {
       <form className="mt-6">
         <div className="mt-4 flex">
           <Button
+            onClick={addToCart}
             type="button"
             className="w-full bg-violet-600 py-6 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500"
           >
