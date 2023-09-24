@@ -11,24 +11,28 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 
 interface Props {
-    
+  product: SanityProduct
 }
 
-export function ProductInfo() {
+export function ProductInfo({ product }: Props) {
+  console.log(product)
+  const [size, setSize] = useState(product.sizes[0])
   function addToCart() {}
 
   return (
     <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-      <h1 className="text-3xl font-bold tracking-tight">Name</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
 
       <div className="mt-3">
         <h2 className="sr-only">Product information</h2>
-        <p className="text-3xl tracking-tight">Price</p>
+        <p className="text-3xl tracking-tight">
+          {formatCurrencyString({ value: product.price, currency: product.currency })}
+        </p>
       </div>
 
       <div className="mt-6">
         <h3 className="sr-only">Description</h3>
-        <div className="space-y-6 text-base">Description</div>
+        <div className="space-y-6 text-base">{product.description}</div>
       </div>
 
       <div className="mt-4">
