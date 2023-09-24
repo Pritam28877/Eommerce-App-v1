@@ -5,9 +5,34 @@ import { SanityProduct } from "@/config/inventory"
 import { ProductGallery } from "@/components/product-gallery"
 import { ProductInfo } from "@/components/product-info"
 
-interface Props {}
+interface Props {
+  params: {
+    slug: string
+  }
+}
 
-export default function Page() {
+export default async function Page({ params }: Props) {
+  const product = await client.fetch<
+    SanityProduct[]
+  >(groq`*[_type == "product" && slug.current == "${params.slug}"][0] {
+    _id,
+    _createdAt,
+    name,
+    sku,
+    image,
+    images,
+    currency,
+    price,
+    description,
+    "slug": slug.current,
+    sizes,
+    colors,
+    categories,
+
+  } `)
+
+  console.log(product)
+
   return (
     <main className="mx-auto max-w-5xl sm:px-6 sm:pt-16 lg:px-8">
       <div className="mx-auto max-w-2xl lg:max-w-none">
