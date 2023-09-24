@@ -13,7 +13,7 @@ interface Props {
 
 export default async function Page({ params }: Props) {
   const product = await client.fetch<
-    SanityProduct[]
+    SanityProduct
   >(groq`*[_type == "product" && slug.current == "${params.slug}"][0] {
     _id,
     _createdAt,

@@ -16,7 +16,7 @@ interface Props {
 
 export function ProductInfo({ product }: Props) {
   console.log(product)
-  const [size, setSize] = useState(product.sizes[0])
+  const [newsize, setNewSize] = useState(product.sizes[0])
   function addToCart() {}
 
   return (
@@ -26,7 +26,10 @@ export function ProductInfo({ product }: Props) {
       <div className="mt-3">
         <h2 className="sr-only">Product information</h2>
         <p className="text-3xl tracking-tight">
-          {formatCurrencyString({ value: product.price, currency: product.currency })}
+          {formatCurrencyString({
+            value: product.price,
+            currency: product.currency,
+          })}
         </p>
       </div>
 
@@ -37,11 +40,16 @@ export function ProductInfo({ product }: Props) {
 
       <div className="mt-4">
         <p>
-          Size: <strong>Size</strong>
+          Size: <strong>{newsize}</strong>
         </p>
-        {[].map((size) => (
-          <Button key={size} variant="default" className="mr-2 mt-4">
-            Size
+        {product.sizes.map((size) => (
+          <Button
+            onClick={() => setNewSize(size)}
+            key={size}
+            variant={newsize === size ? "default" : "outline"}
+            className="mr-2 mt-4"
+          >
+            {getSizeName(size)}
           </Button>
         ))}
       </div>
