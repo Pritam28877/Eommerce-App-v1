@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client"
 import { product } from "@/sanity/schemas/product-schema"
+import { Search } from "lucide-react"
 import { groq } from "next-sanity"
 import { Product } from "use-shopping-cart/core"
 
@@ -12,26 +13,40 @@ import { ProductGrid } from "@/components/product-grid"
 import { ProductSort } from "@/components/product-sort"
 
 interface Props {
-  searchParams : {
+  searchParams: {
     date?: string
     price?: string
     color?: string
     category?: string
     size?: string
+    search?: string
   }
 }
 
-export default async function Page({searchParams}:Props) {
+export default async function Page({ searchParams }: Props) {
   console.log(searchParams)
-  const priceOrder = searchParams.price ? `| order(price ${searchParams.price})` : ``
-  const dateOrder = searchParams.date ? `| order(_createdAt ${searchParams.date})` : ``
+  const priceOrder = searchParams.price
+    ? `| order(price ${searchParams.price})`
+    : ``
+  const dateOrder = searchParams.date
+    ? `| order(_createdAt ${searchParams.date})`
+    : ``
   const order = `${priceOrder} ${dateOrder}`
 
   const productFilter = `_type == "product"`
-  const categoryFilter = searchParams.category ? ` && "${searchParams.category}" in categories` : ``
-  const colorFilter = searchParams.color ? ` && "${searchParams.color}" in colors` : ``
-  const sizeFilter = searchParams.size ? ` && "${searchParams.size}"in sizes` : ``
-  const filter = `*[${productFilter} ${categoryFilter} ${colorFilter} ${sizeFilter}]`
+  const categoryFilter = searchParams.category
+    ? ` && "${searchParams.category}" in categories`
+    : ``
+  const colorFilter = searchParams.color
+    ? ` && "${searchParams.color}" in colors`
+    : ``
+  const sizeFilter = searchParams.size
+    ? ` && "${searchParams.size}"in sizes`
+    : ``
+  const searchFileter = searchParams.search
+    ? ` && name match "${searchParams.search}"`
+    : ``
+  const filter = `*[${productFilter} ${categoryFilter} ${colorFilter} ${sizeFilter} ${searchFileter}]`
   const Products = await client.fetch<SanityProduct[]>(
     groq`${filter} ${order}  {
       _id,
