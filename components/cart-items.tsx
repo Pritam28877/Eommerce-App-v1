@@ -1,5 +1,4 @@
 "use client"
-
 import Image from "next/image"
 import Link from "next/link"
 import { urlForImage } from "@/sanity/lib/image"
@@ -15,9 +14,18 @@ import { useToast } from "@/components/ui/use-toast"
 import { CartItemsEmpty } from "@/components/cart-items-empty"
 
 export function CartItems() {
-  const { cartDetails } = useShoppingCart()
+  const { cartDetails, removeItem, setItemQuantity } = useShoppingCart()
+  console.log(cartDetails)
+  const { toast } = useToast()
   const cartItems = Object.entries(cartDetails!).map(([key, value]) => value)
-  function removeCartItem() {}
+  function removeCartItem(product: Product) {
+    removeItem(product.id)
+    toast({
+      title: "Removed from cart",
+      description: "This product has been removed from your cart",
+      variant: "destructive",
+    })
+  }
 
   if (cartItems.length === 0) return <CartItemsEmpty />
   return (
@@ -26,13 +34,13 @@ export function CartItems() {
       className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-500 dark:border-gray-500"
     >
       {cartItems?.map((product, productIdx) => (
-        <li key={"key"} className="flex py-6 sm:py-10">
+        <li key={product.id} className="flex py-6 sm:py-10">
           <div className="shrink-0">
             <Image
-              src={"src"}
+              src={urlForImage(product.images[0])?.url()}
               alt={"alt"}
-              width={0}
-              height={0}
+              width={200}
+              height={200}
               className="h-24 w-24 rounded-md border-2 border-gray-200 object-cover object-center dark:border-gray-800 sm:h-48 sm:w-48"
               placeholder="blur"
               blurDataURL={`data:image/svg+xml;base64,${toBase64(
@@ -54,28 +62,41 @@ export function CartItems() {
                     </Link>
                   </h3>
                 </div>
-                <p className="mt-1 text-sm font-medium">Price</p>
+                <p className="mt-1 text-sm font-medium">
+                  {formatCurrencyString({
+                    value: product.price,
+                    currency: product.currency,
+                  })}
+                </p>
                 <p className="mt-1 text-sm font-medium">
                   Size: {/* @ts-ignore */}
-                  <strong>Size</strong>
+                  <strong>{getSizeName(product.product_data?.size)}</strong>
                 </p>
               </div>
 
               <div className="mt-4 sm:mt-0 sm:pr-9">
                 <label htmlFor={`quantity-${productIdx}`} className="sr-only">
-                  Quantity, Name
+                  Quantity, {product.name}
                 </label>
                 <Input
                   id={`quantity-${productIdx}`}
                   name={`quantity-${productIdx}`}
                   type="number"
                   className="w-16"
+                  min={1}
+                  max={99}
+                  value={product.quantity}
+                  onChange={(event) =>
+                    setItemQuantity(product.id, Number(event.target.value))
+                  }
                 />
+
                 <div className="absolute right-0 top-0">
                   <Button
                     variant="ghost"
                     type="button"
                     className="-mr-2 inline-flex p-2"
+                    onClick={() => removeCartItem(product)}
                   >
                     <span className="sr-only">Remove</span>
                     <X className="h-5 w-5" aria-hidden="true" />
@@ -93,4 +114,7 @@ export function CartItems() {
       ))}
     </ul>
   )
+}
+function removeItem(_id: any) {
+  throw new Error("Function not implemented.")
 }
