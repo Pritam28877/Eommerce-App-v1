@@ -19,7 +19,7 @@ export function ProductGallery({ product }: Props) {
       {/* Image Grid */}
       <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
         <ul className="grid grid-cols-4 gap-6">
-          {product.images.map((image, index) => (
+          {product.images?.map((image, index) => (
             <div
               key={image._key as string | number}
               className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase hover:bg-gray-50"
