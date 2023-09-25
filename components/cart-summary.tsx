@@ -10,6 +10,7 @@ export function CartSummary() {
   const { cartDetails, formattedTotalPrice, totalPrice, cartCount } =
     useShoppingCart()
   const [loading, setLoading] = useState(false)
+  const isDisabled = cartCount === 0 || loading
   const shippingAmont = cartCount! > 0 ? 100 : 0
   const totalAmount = totalPrice ? totalPrice + shippingAmont : shippingAmont
   function onCheckout() {}
@@ -43,7 +44,7 @@ export function CartSummary() {
       </dl>
 
       <div className="mt-6">
-        <Button className="w-full">
+        <Button onClick={onCheckout} className="w-full" disabled={isDisabled}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {loading ? "Loading..." : "Checkout"}
         </Button>
