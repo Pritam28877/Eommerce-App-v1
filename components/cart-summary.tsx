@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react"
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
 
 import { Button } from "@/components/ui/button"
+import { stripe } from "@/lib/stripe"
 
 export function CartSummary() {
   const {
@@ -19,21 +20,34 @@ export function CartSummary() {
   const shippingAmont = cartCount! > 0 ? 100 : 0
   const totalAmount = totalPrice ? totalPrice + shippingAmont : shippingAmont
   async function onCheckout() {
-    setLoading(true)
-    console.log(cartDetails)
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      body: JSON.stringify({cartDetails}),
-    })
-    console.log(response)
-    const data = await response.json()
-    console.log(data)
-    const result = await redirectToCheckout(data.id)
-    if (result.error) {
-      console.log(result.error)
+    setLoading(true);
+    console.log(cartDetails);
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        body: JSON.stringify({ cartDetails }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log(data); // log the entire data object
+      
+      if (!data.url) {
+        throw new Error("No checkout URL in API response");
+      }
+      
+      // Redirect to the Stripe checkout URL
+      window.location.href = data.url;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
   }
+  
 
   return (
     <section
@@ -54,7 +68,7 @@ export function CartSummary() {
             <span>Shipping estimate</span>
           </dt>
           <dd className="text-sm font-medium">
-            {formatCurrencyString({ value: totalAmount, currency: "inr" })}
+            {formatCurrencyString({ value: totalAmount, currency: "USD" })}
           </dd>
         </div>
         <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-600">

@@ -7,7 +7,7 @@ import { stripe } from "@/lib/stripe"
 
 export async function POST(request: Request) {
   const { cartDetails } = await request.json()
-  console.log(cartDetails)
+  console.log(inventory)
 
   const line_items = validateCartItems(inventory, cartDetails) // changed lineitems to line_items
   console.log(line_items)
@@ -17,17 +17,18 @@ export async function POST(request: Request) {
     submit_type: "pay",
     mode: "payment",
     line_items, // changed lineitems to line_items
+    payment_method_types: ["card"],
     shipping_address_collection: {
       allowed_countries: ["US", "CA", "IN"],
     },
     shipping_options: [
       {
-        shipping_rate: "shr_1Nu9YPSAWTK2a9UdriX34EZv",
+        shipping_rate: "shr_1NuI0EACnWY2s0N92ESYzdCK",
       },
     ],
     billing_address_collection: "auto",
-    success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/card`,
+   success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/checkout`,
   })
   return NextResponse.json(session)
 }
