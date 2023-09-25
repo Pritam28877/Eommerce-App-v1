@@ -7,14 +7,16 @@ import { stripe } from "@/lib/stripe"
 
 export async function POST(request: Request) {
   const { cartDetails } = await request.json()
+  console.log(cartDetails)
 
-  const line_items = validateCartItems(inventory, cartDetails)
+  const line_items = validateCartItems(inventory, cartDetails) // changed lineitems to line_items
+  console.log(line_items)
   const origin = request.headers.get("origin")
 
-  const seassion = await stripe.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     submit_type: "pay",
     mode: "payment",
-    line_items,
+    line_items, // changed lineitems to line_items
     shipping_address_collection: {
       allowed_countries: ["US", "CA", "IN"],
     },
@@ -27,5 +29,5 @@ export async function POST(request: Request) {
     success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/card`,
   })
-  return NextResponse.json(seassion)
+  return NextResponse.json(session)
 }

@@ -7,13 +7,33 @@ import { formatCurrencyString, useShoppingCart } from "use-shopping-cart"
 import { Button } from "@/components/ui/button"
 
 export function CartSummary() {
-  const { cartDetails, formattedTotalPrice, totalPrice, cartCount } =
-    useShoppingCart()
+  const {
+    cartDetails,
+    formattedTotalPrice,
+    totalPrice,
+    cartCount,
+    redirectToCheckout,
+  } = useShoppingCart()
   const [loading, setLoading] = useState(false)
   const isDisabled = cartCount === 0 || loading
   const shippingAmont = cartCount! > 0 ? 100 : 0
   const totalAmount = totalPrice ? totalPrice + shippingAmont : shippingAmont
-  function onCheckout() {}
+  async function onCheckout() {
+    setLoading(true)
+    console.log(cartDetails)
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      body: JSON.stringify({cartDetails}),
+    })
+    console.log(response)
+    const data = await response.json()
+    console.log(data)
+    const result = await redirectToCheckout(data.id)
+    if (result.error) {
+      console.log(result.error)
+    }
+    setLoading(false)
+  }
 
   return (
     <section
@@ -34,7 +54,7 @@ export function CartSummary() {
             <span>Shipping estimate</span>
           </dt>
           <dd className="text-sm font-medium">
-            {formatCurrencyString({ value: totalAmount, currency: "USD" })}
+            {formatCurrencyString({ value: totalAmount, currency: "inr" })}
           </dd>
         </div>
         <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-600">
