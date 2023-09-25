@@ -15,14 +15,17 @@ import { useToast } from "@/components/ui/use-toast"
 import { CartItemsEmpty } from "@/components/cart-items-empty"
 
 export function CartItems() {
+  const { cartDetails } = useShoppingCart()
+  const cartItems = Object.entries(cartDetails!).map(([key, value]) => value)
   function removeCartItem() {}
 
+  if (cartItems.length === 0) return <CartItemsEmpty />
   return (
     <ul
       role="list"
       className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-500 dark:border-gray-500"
     >
-      {[].map((product, productIdx) => (
+      {cartItems?.map((product, productIdx) => (
         <li key={"key"} className="flex py-6 sm:py-10">
           <div className="shrink-0">
             <Image
@@ -31,6 +34,10 @@ export function CartItems() {
               width={0}
               height={0}
               className="h-24 w-24 rounded-md border-2 border-gray-200 object-cover object-center dark:border-gray-800 sm:h-48 sm:w-48"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer(200, 200)
+              )}`}
             />
           </div>
 
@@ -39,8 +46,11 @@ export function CartItems() {
               <div>
                 <div className="flex justify-between">
                   <h3 className="text-sm">
-                    <Link href={`/products/slug`} className="font-medium">
-                      Name
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className="font-medium"
+                    >
+                      {product.name}
                     </Link>
                   </h3>
                 </div>
